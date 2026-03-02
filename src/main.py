@@ -14,16 +14,12 @@ app = setup_fastapi()
 
 @app.get("/ticker-list")
 def get_ticker_list():
-    return {
-        "tickers": load_nasdaq_screener_data()
-    }
+    return load_nasdaq_screener_data()
 
 
-@app.get("/fetch/{ticker}")
-def fetch_ticker(ticker: str):
-    return {
-        "data": fetch_ticker_data(ticker)
-    }
+@app.get("/fetch/ticker/{ticker_id}")
+def fetch_ticker(ticker_id: str):
+    return fetch_ticker_data(ticker_id)
 
 
 @app.get("/")
