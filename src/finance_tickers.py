@@ -10,8 +10,10 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class TickerResponse:
-    data: str
-    error: str
+    """Class for keeping info and historical data together for a stock."""
+    history: str | None
+    info: dict | None
+    error: str | None = None
 
 
 def load_ticker_list() -> str:
@@ -23,7 +25,9 @@ def load_ticker_list() -> str:
 def fetch_ticker_data(ticker: Optional[str] = None) -> TickerResponse:
     if not ticker or not isinstance(ticker, str) or not ticker.strip():
         logger.warning(f"Error: Invalid ticker value: {ticker}")
-        return TickerResponse(data="", error="Invalid ticker value")
+        return TickerResponse(history=None, info=None, error="Invalid ticker value")
 
     df = yf.download(ticker.strip().upper(), period='3d')
-    return TickerResponse(data=df.to_json(), error="")
+    info = yf.Ticker(ticker=ticker.strip().upper()).info
+
+    return TickerResponse(history=df.to_json(), info=info, error=None)

@@ -18,7 +18,7 @@ def get_ticker_list() -> str:
 
 
 @app.get("/fetch/ticker/{ticker_id}")
-def fetch_ticker(ticker_id: str) -> TickerResponse:
+def fetch_ticker_details(ticker_id: str) -> TickerResponse:
     return fetch_ticker_data(ticker_id)
 
 
