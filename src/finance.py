@@ -1,17 +1,7 @@
-import logging
-
-import pandas as pd
-
-logger = logging.getLogger(__name__)
-
-
-def load_nasdaq_screener_data() -> str:
-    df = pd.read_csv('data/test.csv')
-    logger.debug("Initial data: {} rows loaded".format(df.shape[0]))
-    return df.to_json()
-
+from src.config.setup_logging import setup_logging
+from src.finance_tickers import fetch_ticker_data
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    pd.set_option('display.max_columns', 100)
-    load_nasdaq_screener_data()
+    setup_logging()
+    epam = fetch_ticker_data('epam')
+    print(epam)

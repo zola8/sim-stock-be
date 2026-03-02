@@ -2,28 +2,27 @@ import logging
 
 import uvicorn
 import yfinance as yf
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-from src.finance import load_nasdaq_screener_data
+from src.config.setup_fastapi import setup_fastapi
+from src.config.setup_logging import setup_logging
+from src.finance_tickers import load_nasdaq_screener_data, fetch_ticker_data
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+setup_logging()
+app = setup_fastapi()
 
 
-@app.get("/get-initial-data")
-def get_initial_data():
+@app.get("/ticker-list")
+def get_ticker_list():
     return {
-        "nasdaq_screener": load_nasdaq_screener_data()
+        "tickers": load_nasdaq_screener_data()
+    }
+
+
+@app.get("/fetch/{ticker}")
+def fetch_ticker(ticker: str):
+    return {
+        "data": fetch_ticker_data(ticker)
     }
 
 
