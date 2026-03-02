@@ -14,7 +14,7 @@ class TickerResponse:
     error: str
 
 
-def load_nasdaq_screener_data() -> str:
+def load_ticker_list() -> str:
     df = pd.read_csv('data/test.csv')
     logger.debug("Initial data: {} rows loaded".format(df.shape[0]))
     return df.to_json()
@@ -25,5 +25,5 @@ def fetch_ticker_data(ticker: Optional[str] = None) -> TickerResponse:
         logger.warning(f"Error: Invalid ticker value: {ticker}")
         return TickerResponse(data="", error="Invalid ticker value")
 
-    df = yf.download(ticker.strip().upper(), period='max')
+    df = yf.download(ticker.strip().upper(), period='3d')
     return TickerResponse(data=df.to_json(), error="")
