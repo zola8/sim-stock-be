@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_nasdaq_screener_data() -> str:
-    df = pd.read_csv('data/nasdaq_screener_20260301.csv')
+    df = pd.read_csv('data/test.csv')
     logger.debug("Initial data: {} rows loaded".format(df.shape[0]))
     return df.to_json()
 
