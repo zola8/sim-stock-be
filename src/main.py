@@ -13,7 +13,7 @@ app = setup_fastapi()
 
 
 @app.get("/ticker-list")
-def get_ticker_list() -> str:
+def get_ticker_list() -> dict:
     return load_ticker_list()
 
 

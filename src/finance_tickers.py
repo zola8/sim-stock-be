@@ -21,10 +21,10 @@ class TickerResponse:
     revenue_estimate: dict | None
 
 
-def load_ticker_list() -> str:
+def load_ticker_list() -> dict:
     df = pd.read_csv('data/test.csv')
     logger.debug("Initial data: {} rows loaded".format(df.shape[0]))
-    return df.to_json()
+    return df.to_dict()
 
 
 def convert_timestamps(history_dict):
