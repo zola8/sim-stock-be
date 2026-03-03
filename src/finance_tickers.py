@@ -12,14 +12,29 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TickerResponse:
     """Class for keeping info and historical data together for a stock."""
-    history: str | None
-    info: dict | None
+    history: dict
+    info: dict
+    isin: str
+    financials: dict | None
+    income_stmt: dict | None
+    recommendations: dict | None
+    revenue_estimate: dict | None
 
 
 def load_ticker_list() -> str:
     df = pd.read_csv('data/test.csv')
     logger.debug("Initial data: {} rows loaded".format(df.shape[0]))
     return df.to_json()
+
+
+def convert_timestamps(history_dict):
+    result = {}
+    for (metric, symbol), data in history_dict.items():
+        result[(metric, symbol)] = {
+            timestamp.strftime('%Y-%m-%d'): value
+            for timestamp, value in data.items()
+        }
+    return result
 
 
 def fetch_ticker_data(ticker_symbol: Optional[str] = None) -> TickerResponse:
@@ -39,5 +54,14 @@ def fetch_ticker_data(ticker_symbol: Optional[str] = None) -> TickerResponse:
         )
 
     df = yf.download(ticker_symbol.strip().upper(), period='3d')
+    history = convert_timestamps(df.to_dict())
 
-    return TickerResponse(history=df.to_json(), info=ticker.info)
+    return TickerResponse(
+        history=history,
+        info=ticker.info,
+        isin=ticker.isin.upper(),
+        financials=ticker.financials.to_json(),
+        income_stmt=ticker.income_stmt.to_json(),
+        recommendations=ticker.recommendations.to_json(),
+        revenue_estimate=ticker.revenue_estimate.to_json(),
+    )

@@ -1,8 +1,11 @@
+from pprint import pprint
+
 import yfinance as yf
 
-if __name__ == '__main__':
-    ticker = yf.Ticker("INVALID")
-    print(ticker.info)
+from src.finance_tickers import fetch_ticker_data, convert_timestamps
 
-    if not ticker.info or 'regularMarketPrice' not in ticker.info:
-        print("Ticker not found")
+if __name__ == '__main__':
+    # pprint(fetch_ticker_data('epam'))
+    df = yf.download('epam', period='3d')
+    history = convert_timestamps(df.to_dict())
+    pprint(history)
