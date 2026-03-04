@@ -20,8 +20,8 @@ class TickerResponse:
     revenue_estimate: dict | None
 
 
-def load_ticker_list() -> dict:
-    df = pd.read_csv('data/test.csv')
+def load_ticker_list(filename: str) -> dict:
+    df = pd.read_csv(filename)
     logger.debug("Initial data: {} rows loaded".format(df.shape[0]))
     return df.to_dict()
 
