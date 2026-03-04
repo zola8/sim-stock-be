@@ -15,7 +15,6 @@ class TickerResponse:
     history: dict
     info: dict
     isin: str
-    financials: dict | None
     income_stmt: dict | None
     recommendations: dict | None
     revenue_estimate: dict | None
@@ -53,15 +52,14 @@ def fetch_ticker_data(ticker_symbol: Optional[str] = None) -> TickerResponse:
             detail=f"Ticker not found: {ticker_symbol}"
         )
 
-    df = yf.download(ticker_symbol.strip().upper(), period='3d')
+    df = yf.download(ticker_symbol.strip().upper(), period='max')
     history = convert_timestamps(df.to_dict())
 
     return TickerResponse(
         history=history,
         info=ticker.info,
         isin=ticker.isin.upper(),
-        financials=ticker.financials.to_json(),
-        income_stmt=ticker.income_stmt.to_json(),
+        income_stmt=ticker.ttm_income_stmt.to_json(),
         recommendations=ticker.recommendations.to_json(),
         revenue_estimate=ticker.revenue_estimate.to_json(),
     )
