@@ -8,10 +8,10 @@ def setup_fastapi() -> FastAPI:
         CORSMiddleware,
         allow_origins=[
             "http://localhost:3000",
-            "https://sim-stock-be.vercel.app/",
-            "https://sim-stock-fe.vercel.app/",
+            "https://sim-stock-be.vercel.app",
+            "https://sim-stock-fe.vercel.app",
         ],
-        allow_credentials=True,
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
     )
