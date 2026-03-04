@@ -8,8 +8,9 @@ def get_file_path(filename: str) -> str:
 
     if current_path == target_path:
         data_path = current_path / filename
+        logging.warning(f"data_path for file loading: {data_path}")
         return str(data_path)
     else:
-        logging.warning(f"current_path: {current_path}")
         data_path = current_path / "src" / filename
+        logging.warning(f"data_path for file loading: {data_path}")
         return str(data_path)
